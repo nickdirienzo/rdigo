@@ -28,8 +28,9 @@ func (r *Rdio) BeginAuthentication(callbackUrl string) (*oauth.RequestToken, str
 	return r.Consumer.GetRequestTokenAndUrl(callbackUrl)
 }
 
-func (r *Rdio) CompleteAuthentication(rToken *oauth.RequestToken, verifier string) error {
-	token, err := r.Consumer.AuthorizeToken(rToken, verifier)
+func (r *Rdio) CompleteAuthentication(requestToken, requestTokenSecret, verifier string) error {
+	rToken := oauth.RequestToken{Token: requestToken, Secret: requestTokenSecret}
+	token, err := r.Consumer.AuthorizeToken(&rToken, verifier)
 	r.AccessToken = token
 	return err
 }
